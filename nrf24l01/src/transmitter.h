@@ -9,7 +9,6 @@
  
  */ 
 
-
 #ifndef TRANSMITTER_H_
 #define TRANSMITTER_H_
 #include <lcd.h>
@@ -89,8 +88,7 @@ static void GetNewData(uint8_t data)
 		case 0:
 			if (data == START_BYTE0) 
 			{
-				PCK_Num++; 
-				//LED_White_R_PORT.OUTTGL = LED_White_R_PIN_bm;
+				PCK_Num++;// LED_White_R_PORT.OUTTGL = LED_White_R_PIN_bm;
 			}
 			break;
 		case 1:
@@ -186,35 +184,33 @@ static void GetNewData(uint8_t data)
 						Robot_D_tmp[i].KCK=0;
 						Robot_D_tmp[i].CHP=0;
 
-					if (Robot_D[i].RID<Max_Robot)
-					{
-							
-					
 						
-						Buf_Tx_R[Robot_D[i].RID][0] = Robot_D[i].RID;  
-						Buf_Tx_R[Robot_D[i].RID][1] = Robot_D[i].M0.Bytes[1];
-						Buf_Tx_R[Robot_D[i].RID][2] = Robot_D[i].M0.Bytes[0];
-						Buf_Tx_R[Robot_D[i].RID][3] = Robot_D[i].M1.Bytes[1];
-						Buf_Tx_R[Robot_D[i].RID][4] = Robot_D[i].M1.Bytes[0];
-						Buf_Tx_R[Robot_D[i].RID][5] = Robot_D[i].M2.Bytes[1];
-						Buf_Tx_R[Robot_D[i].RID][6] = Robot_D[i].M2.Bytes[0];
-						Buf_Tx_R[Robot_D[i].RID][7] = Robot_D[i].M3.Bytes[1];
-						Buf_Tx_R[Robot_D[i].RID][8] = Robot_D[i].M3.Bytes[0];
-						Buf_Tx_R[Robot_D[i].RID][9] = Robot_D[i].KCK;
-						Buf_Tx_R[Robot_D[i].RID][10] = Robot_D[i].CHP;
+						if (Robot_D[i].RID<Max_Robot)
+						{
+							//Buf_Tx_R[Robot_D[i].RID][0] = Robot_D[i].RID;
+							//Buf_Tx_R[Robot_D[i].RID][1] = Robot_D[i].M0.Bytes[1];
+							//Buf_Tx_R[Robot_D[i].RID][2] = Robot_D[i].M0.Bytes[0];
+							//Buf_Tx_R[Robot_D[i].RID][3] = Robot_D[i].M1.Bytes[1];
+							//Buf_Tx_R[Robot_D[i].RID][4] = Robot_D[i].M1.Bytes[0];
+							//Buf_Tx_R[Robot_D[i].RID][5] = Robot_D[i].M2.Bytes[1];
+							//Buf_Tx_R[Robot_D[i].RID][6] = Robot_D[i].M2.Bytes[0];
+							//Buf_Tx_R[Robot_D[i].RID][7] = Robot_D[i].M3.Bytes[1];
+							//Buf_Tx_R[Robot_D[i].RID][8] = Robot_D[i].M3.Bytes[0];
+							//Buf_Tx_R[Robot_D[i].RID][9] = Robot_D[i].KCK;
+							//Buf_Tx_R[Robot_D[i].RID][10] = Robot_D[i].CHP;
 
-						pck_timeout[Robot_D[i].RID]=0;
+							pck_timeout[Robot_D[i].RID]=0;
 						}						
 					}
 				}
-				LED_Green_R_PORT.OUTTGL = LED_Green_R_PIN_bm;
+				//LED_Green_R_PORT.OUTTGL = LED_Green_R_PIN_bm;
 			}
 			PCK_Num = 0;
 		}					
 	}
 }
 
-static void SendNewData()
+void SendNewData()
 {
 	Send_cnt = 0;
 	
@@ -235,7 +231,7 @@ static void SendNewData()
 	
 }
 
-static void SendData()
+void SendData()
 {
 	Send_cnt = 0;
 	

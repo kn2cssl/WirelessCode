@@ -29,7 +29,7 @@
 #define LED_White_L_PIN_bm		PIN5_bm
 #define LED_Green_L_PIN_bp		PIN4_bp
 #define LED_Green_L_PIN_bm		PIN4_bm
-#define LED_White_R(_STATUS_)	Out_Set(LED_White_R_PIN_bp,_STATUS_ ) 
+#define LED_White_R(_STATUS_)	Out_Set(LED_White_R_PORT,LED_White_R_PIN_bp,_STATUS_ ) 
 #define LED_Green_R(_STATUS_)	Out_Set(LED_Green_R_PORT,LED_Green_R_PIN_bp,_STATUS_ ) 
 #define LED_White_L(_STATUS_)	Out_Set(LED_White_L_PORT,LED_White_L_PIN_bp,_STATUS_ ) 
 #define LED_Green_L(_STATUS_)   Out_Set(LED_Green_L_PORT,LED_Green_L_PIN_bp,_STATUS_ ) 
@@ -130,7 +130,7 @@
 #define NRF24L01_L_IRQ_LINE		PIN0_bm
 
 #define PRX_R PORTC_INT0_vect
-#define PTX_L PORTE_INT0_vect
+#define PRX_L PORTE_INT0_vect
 
 void En_RC32M(void);
 void PORT_init(void);

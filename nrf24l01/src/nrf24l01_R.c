@@ -45,7 +45,6 @@
 //char Address_P1[5] = { 0xc7, 0xd3, 0xf0, 0x35, 0x77};
 //char Address_P0[5] = { 0x11, 0x22, 0x33, 0x44, 0x55};
 	
-
 char Address_R_P2[5] = { 0x13, 0x22, 0x33, 0x44, 0x55};
 char Address_R_P1[5] = { 0x12, 0x22, 0x33, 0x44, 0x55};
 char Address_R_P0[5] = { 0x11, 0x22, 0x33, 0x44, 0x55};
@@ -355,7 +354,7 @@ char *Address, char Address_Width, char Size_Payload, char Tx_Power)
 
 	// Enable Enhanced ShockBurst
 	NRF24L01_R_Set_ShockBurst(_ShockBurst_OFF);
-	NRF24L01_R_WriteReg(W_REGISTER | EN_AA, 0x07);
+	NRF24L01_R_WriteReg(W_REGISTER | EN_AA, 0x01);
 	NRF24L01_R_WriteReg(W_REGISTER | SETUP_RETR, 0x2f);
 	//NRF24L01_L_WriteReg(W_REGISTER | FEATURE, 0x02);  //
 	
@@ -429,7 +428,7 @@ void NRF24L01_R_Receive(char Buf[_Buffer_Size]) {
 
 void NRF24L01_R_Send(char Buf[_Buffer_Size]) {
 	NRF24L01_R_Write_TX_Buf(Buf, _Buffer_Size);
-	if(NRF24L01_R_ReadReg(FIFO_STATUS) & TX_EMPTY == TX_EMPTY )
+	if((NRF24L01_R_ReadReg(FIFO_STATUS) & TX_EMPTY) == TX_EMPTY )
 		NRF24L01_R_RF_TX();
 	while ((NRF24L01_R_Get_Status() & _TX_DS) != _TX_DS);
 	NRF24L01_R_Clear_Interrupts();

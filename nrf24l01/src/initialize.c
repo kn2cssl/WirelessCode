@@ -28,9 +28,9 @@ void PORT_init(void)
 	PORTB_DIR = Segment_SideL_R_Enable_bm | Segment_SideL_L_Enable_bm | Segment_SideR_R_Enable_bm | Segment_SideR_L_Enable_bm 
 				| LED_Green_L_PIN_bm | LED_Green_R_PIN_bm | LED_White_R_PIN_bm | LED_White_L_PIN_bm;
 	PORTC_DIR = NRF24L01_R_CE_LINE | NRF24L01_R_CS_LINE | NRF24L01_R_MOSI_LINE | NRF24L01_R_SCK_LINE | Wireless_TX_R_PIN_bm;
-			//PORTC_PIN0CTRL |= PORT_ISC_LEVEL_gc;
-			//PORTC_INTCTRL |= PORT_INT0LVL_LO_gc;
-			//PORTC_INT0MASK |= PIN0_bm;
+			PORTC_PIN0CTRL |= PORT_ISC_LEVEL_gc;
+			PORTC_INTCTRL |= PORT_INT0LVL_LO_gc;
+			PORTC_INT0MASK |= PIN0_bm;
 	PORTD_DIR = Buzzer_PIN_bm;
 	PORTE_DIR = NRF24L01_L_CE_LINE | NRF24L01_L_CS_LINE | NRF24L01_L_MOSI_LINE | NRF24L01_L_SCK_LINE | Wireless_TX_L_PIN_bm;
 	PORTE_PIN0CTRL |= PORT_ISC_LEVEL_gc;

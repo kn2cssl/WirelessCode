@@ -37,9 +37,9 @@
  Please report any bug and / or solution you find.
 */
 
-//char Address_L_P2[5] = { 0x16, 0x22, 0x33, 0x44, 0x55};
-//char Address_L_P1[5] = { 0x15, 0x22, 0x33, 0x44, 0x55};
-//char Address_L_P0[5] = { 0x11, 0x22, 0x33, 0x44, 0x55};
+char Address_L_P2[5] = { 0x16, 0x22, 0x33, 0x44, 0x55};
+char Address_L_P1[5] = { 0x15, 0x22, 0x33, 0x44, 0x55};
+char Address_L_P0[5] = { 0x14, 0x22, 0x33, 0x44, 0x55};
 
 #include "NRF24L01_L.h"
 
@@ -345,7 +345,7 @@ char *Address, char Address_Width, char Size_Payload, char Tx_Power) {
 
 	// Enable Enhanced ShockBurst
 	NRF24L01_L_Set_ShockBurst(_ShockBurst_OFF);
-	NRF24L01_L_WriteReg(W_REGISTER | EN_AA, 0x01);//0x07
+	NRF24L01_L_WriteReg(W_REGISTER | EN_AA, 0x07);
 	NRF24L01_L_WriteReg(W_REGISTER | SETUP_RETR, 0x2f);
 	//NRF24L01_L_WriteReg(W_REGISTER | FEATURE, 0x02);  //
 	
@@ -355,13 +355,13 @@ char *Address, char Address_Width, char Size_Payload, char Tx_Power) {
 
 	NRF24L01_L_Set_Address_Width(Address_Width);//////////////////////
 
-	NRF24L01_L_Set_RX_Pipe(0, Address, Address_Width, Size_Payload);
-	//NRF24L01_L_Set_RX_Pipe(1, Address_L_P1, Address_Width, Size_Payload);
-	//NRF24L01_L_Set_RX_Pipe(2, Address_L_P2, Address_Width, Size_Payload);
+	NRF24L01_L_Set_RX_Pipe(0, Address_L_P0, Address_Width, Size_Payload);
+	NRF24L01_L_Set_RX_Pipe(1, Address_L_P1, Address_Width, Size_Payload);
+	NRF24L01_L_Set_RX_Pipe(2, Address_L_P2, Address_Width, Size_Payload);
 
 	NRF24L01_L_Set_CH(CH);
 
-	NRF24L01_L_Set_TX_Address(Address, Address_Width); // Set Transmit address
+	NRF24L01_L_Set_TX_Address(Address_L_P0, Address_Width); // Set Transmit address
 
 	// Bits 4..6: Reflect interrupts as active low on the IRQ pin
 	// Bit 3: Enable CRC
@@ -419,7 +419,7 @@ void NRF24L01_L_Receive(char Buf[_Buffer_Size]) {
 
 void NRF24L01_L_Send(char Buf[_Buffer_Size]) {
 	NRF24L01_L_Write_TX_Buf(Buf, _Buffer_Size);
-	if(NRF24L01_L_ReadReg(FIFO_STATUS) & TX_EMPTY == TX_EMPTY )
+	if((NRF24L01_L_ReadReg(FIFO_STATUS) & TX_EMPTY) == TX_EMPTY )
 		NRF24L01_L_RF_TX();
 	while ((NRF24L01_L_Get_Status() & _TX_DS) != _TX_DS)
 	{
