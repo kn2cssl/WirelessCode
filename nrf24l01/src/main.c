@@ -14,7 +14,7 @@
 char Buf_Tx_R[Max_Robot][_Buffer_Size] ;
 char Buf_Rx_R[Max_Robot][_Buffer_Size];
 //char Buf_Tx_Comp[122] = {0xa5,0x5a}; //2+10*12
-int tmprid;
+int tmprid,robotspeed;
 
 char Address[_Address_Width] = { 0x11, 0x22, 0x33, 0x44, 0x55};		
 char str[40];
