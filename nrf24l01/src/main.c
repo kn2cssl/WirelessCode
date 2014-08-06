@@ -216,6 +216,7 @@ ISR(PRX_L)
             //1) read payload through SPI,
             NRF24L01_L_Read_RX_Buf(Buf_Rx_R[tmprid+3], _Buffer_Size);
             //2) clear RX_DR IRQ,
+			robotspeed= Buf_Rx_R[1][9]| Buf_Rx_R[1][8]<<8 ;
             status_L=NRF24L01_L_WriteReg(W_REGISTER | STATUSe, _RX_DR );
             //3) read FIFO_STATUS to check if there are more payloads available in RX FIFO,
             //4) if there are more data in RX FIFO, repeat from step 1).
