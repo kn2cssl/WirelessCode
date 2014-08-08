@@ -228,7 +228,8 @@ ISR(PRX_L)
     }
     if ((status_L&_MAX_RT) == _MAX_RT)
     {
-        NRF24L01_L_Flush_TX();
+        //LED_Green_R_PORT.OUTTGL = LED_Green_R_PIN_bm;
+		NRF24L01_L_Flush_TX();
     }
 }
 

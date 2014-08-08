@@ -354,7 +354,7 @@ char *Address, char Address_Width, char Size_Payload, char Tx_Power)
 
 	// Enable Enhanced ShockBurst
 	NRF24L01_R_Set_ShockBurst(_ShockBurst_OFF);
-	NRF24L01_R_WriteReg(W_REGISTER | EN_AA, 0x01);
+	NRF24L01_R_WriteReg(W_REGISTER | EN_AA, 0x07);
 	NRF24L01_R_WriteReg(W_REGISTER | SETUP_RETR, 0x2f);
 	//NRF24L01_L_WriteReg(W_REGISTER | FEATURE, 0x02);  //
 	

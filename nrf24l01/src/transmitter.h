@@ -187,17 +187,17 @@ static void GetNewData(uint8_t data)
 						
 						if (Robot_D[i].RID<Max_Robot)
 						{
-							//Buf_Tx_R[Robot_D[i].RID][0] = Robot_D[i].RID;
-							//Buf_Tx_R[Robot_D[i].RID][1] = Robot_D[i].M0.Bytes[1];
-							//Buf_Tx_R[Robot_D[i].RID][2] = Robot_D[i].M0.Bytes[0];
-							//Buf_Tx_R[Robot_D[i].RID][3] = Robot_D[i].M1.Bytes[1];
-							//Buf_Tx_R[Robot_D[i].RID][4] = Robot_D[i].M1.Bytes[0];
-							//Buf_Tx_R[Robot_D[i].RID][5] = Robot_D[i].M2.Bytes[1];
-							//Buf_Tx_R[Robot_D[i].RID][6] = Robot_D[i].M2.Bytes[0];
-							//Buf_Tx_R[Robot_D[i].RID][7] = Robot_D[i].M3.Bytes[1];
-							//Buf_Tx_R[Robot_D[i].RID][8] = Robot_D[i].M3.Bytes[0];
-							//Buf_Tx_R[Robot_D[i].RID][9] = Robot_D[i].KCK;
-							//Buf_Tx_R[Robot_D[i].RID][10] = Robot_D[i].CHP;
+							Buf_Tx_R[Robot_D[i].RID][0] = Robot_D[i].RID;
+							Buf_Tx_R[Robot_D[i].RID][1] = Robot_D[i].M0.Bytes[1];
+							Buf_Tx_R[Robot_D[i].RID][2] = Robot_D[i].M0.Bytes[0];
+							Buf_Tx_R[Robot_D[i].RID][3] = Robot_D[i].M1.Bytes[1];
+							Buf_Tx_R[Robot_D[i].RID][4] = Robot_D[i].M1.Bytes[0];
+							Buf_Tx_R[Robot_D[i].RID][5] = Robot_D[i].M2.Bytes[1];
+							Buf_Tx_R[Robot_D[i].RID][6] = Robot_D[i].M2.Bytes[0];
+							Buf_Tx_R[Robot_D[i].RID][7] = Robot_D[i].M3.Bytes[1];
+							Buf_Tx_R[Robot_D[i].RID][8] = Robot_D[i].M3.Bytes[0];
+							Buf_Tx_R[Robot_D[i].RID][9] = Robot_D[i].KCK;
+							Buf_Tx_R[Robot_D[i].RID][10] = Robot_D[i].CHP;
 
 							pck_timeout[Robot_D[i].RID]=0;
 						}						
