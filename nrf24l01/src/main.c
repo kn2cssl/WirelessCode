@@ -12,7 +12,9 @@
 #include "transmitter.h"
 
 char Buf_Tx_R[Max_Robot][_Buffer_Size] ;
+char Buf_Tx_L[Max_Robot][_Buffer_Size] ;
 char Buf_Rx_R[Max_Robot][_Buffer_Size];
+char Buf_Rx_L[Max_Robot][_Buffer_Size];
 //char Buf_Tx_Comp[122] = {0xa5,0x5a}; //2+10*12
 int tmprid;
 
@@ -22,7 +24,7 @@ uint8_t count;
 uint8_t flg;
 float P_temp,I_temp,D_temp,P,I,D,a=0,ki=0.65,kp=0.15,kd=0.05,M1,M1_temp;//ki=1.34,kp=1,kd=0.02,;
 
-uint16_t pck_timeout[Max_Robot];	
+uint16_t pck_timeout_R[Max_Robot],pck_timeout_L[Max_Robot];	
 
 int main (void)
 {
@@ -78,7 +80,8 @@ int main (void)
 
     for (uint8_t i=0;i<Max_Robot;i++)
     {
-        Robot_D_tmp[i].RID=12;
+        Robot_D_tmp_R[i].RID=12;
+		 Robot_D_tmp_L[i].RID=12;
     }
 	
 	
@@ -130,11 +133,11 @@ ISR(TCD0_OVF_vect)
 {
     for (uint8_t i=0;i<Max_Robot;i++)
     {
-        pck_timeout[i]++;
-        if (pck_timeout[i]>=300)
+        pck_timeout_R[i]++;
+		pck_timeout_L[i]++;
+        if (pck_timeout_R[i]>=300)
         {
-            if(pck_timeout[i]<=600)
-            
+            if(pck_timeout_R[i]<=600)
             {
 	            Buf_Tx_R[i][1] = 0;
 	            Buf_Tx_R[i][2] =1;
@@ -160,6 +163,36 @@ ISR(TCD0_OVF_vect)
 	            Buf_Tx_R[i][9] = 0;
 	            Buf_Tx_R[i][10] = 0;
             }
+		}
+	    if (pck_timeout_L[i]>=300)
+			 {
+				 if(pck_timeout_L[i]<=600)
+				 
+				 {
+					 Buf_Tx_L[i][1] = 0;
+					 Buf_Tx_L[i][2] =1;
+					 Buf_Tx_L[i][3] = 0;
+					 Buf_Tx_L[i][4] = 1;
+					 Buf_Tx_L[i][5] = 0;
+					 Buf_Tx_L[i][6] = 1;
+					 Buf_Tx_L[i][7] = 0;
+					 Buf_Tx_L[i][8] = 1;
+					 Buf_Tx_L[i][9] = 0;
+					 Buf_Tx_L[i][10] = 0;
+				 }
+				 else
+				 {
+					 Buf_Tx_L[i][1] = 0;
+					 Buf_Tx_L[i][2] = 0;
+					 Buf_Tx_L[i][3] = 0;
+					 Buf_Tx_L[i][4] = 0;
+					 Buf_Tx_L[i][5] = 0;
+					 Buf_Tx_L[i][6] = 0;
+					 Buf_Tx_L[i][7] = 0;
+					 Buf_Tx_L[i][8] = 0;
+					 Buf_Tx_L[i][9] = 0;
+					 Buf_Tx_L[i][10] = 0;
+				 }
         }
     }
     while(Menu_PORT.IN & Menu_Side_Switch_PIN_bm);
@@ -212,9 +245,9 @@ ISR(PRX_L)
 			wdt_reset();
 			//Buf_Tx_R[0] = "123456789abcdefghijklmnopqrstuvw";
 			tmprid = ((status_L&0x0e)>>1);
-            NRF24L01_L_WriteRegBuf(W_ACK_PAYLOAD + tmprid,Buf_Tx_R[tmprid+3], _Buffer_Size);
+            NRF24L01_L_WriteRegBuf(W_ACK_PAYLOAD + tmprid,Buf_Tx_L[tmprid], _Buffer_Size);
             //1) read payload through SPI,
-            NRF24L01_L_Read_RX_Buf(Buf_Rx_R[tmprid+3], _Buffer_Size);
+            NRF24L01_L_Read_RX_Buf(Buf_Rx_L[tmprid], _Buffer_Size);
             //2) clear RX_DR IRQ,
             status_L=NRF24L01_L_WriteReg(W_REGISTER | STATUSe, _RX_DR );
             //3) read FIFO_STATUS to check if there are more payloads available in RX FIFO,
@@ -235,7 +268,7 @@ ISR(PRX_L)
 
 ISR(USART_R_RXC_vect) 
 {
-    GetNewData(USARTC0_DATA);
+    GetNewData_R(USARTC0_DATA);
 }
 
 ISR(USART_R_DRE_vect) //Wireless_R_USART 
@@ -245,8 +278,9 @@ ISR(USART_R_DRE_vect) //Wireless_R_USART
 
 ISR(USART_L_RXC_vect)
 {
-    char data;
-    data=USARTE0_DATA;
+	GetNewData_L(USARTE0_DATA);
+    //char data;
+    //data=USARTE0_DATA;
 
 
     //switch (data)
