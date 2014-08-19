@@ -80,7 +80,7 @@ int main (void)
 
     for (uint8_t i=0;i<Max_Robot;i++)
     {
-        Robot_D_tmp_R[i].RID=12;
+         Robot_D_tmp_R[i].RID=12;
 		 Robot_D_tmp_L[i].RID=12;
     }
 	
@@ -97,6 +97,7 @@ int main (void)
 				//usart_putchar(&Wireless_R_USART,Buf_Rx_R[i][j]);
 		//for (uint8_t i=0;i<_Buffer_Size;i++)
            //usart_putchar(&USARTE0,Buf_Rx_R[0][i]);
+		   		
         for(uint8_t i=0;i<12;i++)
         {
             Buf_Tx_R[i][11] = Menu_Num;
@@ -236,34 +237,36 @@ ISR(PRX_R)
 ISR(PRX_L)
 {
 	wdt_reset();
-    uint8_t status_L = NRF24L01_L_WriteReg( W_REGISTER|STATUSe,_TX_DS|_MAX_RT);
-    if((status_L & _RX_DR) == _RX_DR)
-    {
-		LED_White_L_PORT.OUTTGL = LED_White_L_PIN_bm;
-        do
-        {
-			wdt_reset();
-			//Buf_Tx_R[0] = "123456789abcdefghijklmnopqrstuvw";
-			tmprid = ((status_L&0x0e)>>1);
-            NRF24L01_L_WriteRegBuf(W_ACK_PAYLOAD + tmprid,Buf_Tx_L[tmprid], _Buffer_Size);
-            //1) read payload through SPI,
-            NRF24L01_L_Read_RX_Buf(Buf_Rx_L[tmprid], _Buffer_Size);
-            //2) clear RX_DR IRQ,
-            status_L=NRF24L01_L_WriteReg(W_REGISTER | STATUSe, _RX_DR );
-            //3) read FIFO_STATUS to check if there are more payloads available in RX FIFO,
-            //4) if there are more data in RX FIFO, repeat from step 1).
-        } while((NRF24L01_L_ReadReg(FIFO_STATUS)&RX_EMPTY) == 0x00);
-    }
+	//LED_White_L_PORT.OUTTGL = LED_White_L_PIN_bm;
+	uint8_t status_L = NRF24L01_L_ReadReg(STATUSe);
 
-    if((status_L&_TX_DS) == _TX_DS)
-    {
-        LED_Green_L_PORT.OUTTGL = LED_Green_L_PIN_bm;
-    }
-    if ((status_L&_MAX_RT) == _MAX_RT)
-    {
-        //LED_Green_R_PORT.OUTTGL = LED_Green_R_PIN_bm;
+	if((status_L & _RX_DR) == _RX_DR)
+	{
+		LED_White_L_PORT.OUTTGL = LED_White_L_PIN_bm;
+		do
+		{
+			wdt_reset();
+			//strcat(Buf_Tx_R[0] ,"123456789abcdefghijklmnopqrstuvw");
+			tmprid = ((status_L&0x0e)>>1);
+			NRF24L01_L_WriteRegBuf(W_ACK_PAYLOAD + tmprid, Buf_Tx_L[tmprid+3], _Buffer_Size);
+			//1) read payload through SPI,
+			NRF24L01_L_Read_RX_Buf(Buf_Rx_L[tmprid], _Buffer_Size);
+			//2) clear RX_DR IRQ,
+			status_L=NRF24L01_L_WriteReg(W_REGISTER | STATUSe, _RX_DR );
+			//3) read FIFO_STATUS to check if there are more payloads available in RX FIFO,
+			//4) if there are more data in RX FIFO, repeat from step 1).
+		} while((NRF24L01_L_ReadReg(FIFO_STATUS)&RX_EMPTY) == 0x00);
+	}
+	status_L = NRF24L01_L_WriteReg(W_REGISTER|STATUSe,_TX_DS|_MAX_RT);
+	if((status_L&_TX_DS) == _TX_DS)
+	{
+		LED_Green_L_PORT.OUTTGL = LED_Green_L_PIN_bm;
+	}
+	if ((status_L&_MAX_RT) == _MAX_RT)
+	{
+		//LED_Green_L_PORT.OUTTGL = LED_Green_L_PIN_bm;
 		NRF24L01_L_Flush_TX();
-    }
+	}
 }
 
 ISR(USART_R_RXC_vect) 

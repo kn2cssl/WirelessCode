@@ -323,7 +323,7 @@ static void GetNewData_L(uint8_t data)
 						Robot_D_tmp_L[i].CHP=0;
 
 						if (Robot_D_L[i].RID<Max_Robot && Robot_D_L[i].RID>2)
-						{
+						{   
 							Buf_Tx_L[Robot_D_L[i].RID][0] = Robot_D_L[i].RID;
 							Buf_Tx_L[Robot_D_L[i].RID][1] = Robot_D_L[i].M0.Bytes[1];
 							Buf_Tx_L[Robot_D_L[i].RID][2] = Robot_D_L[i].M0.Bytes[0];
@@ -335,7 +335,7 @@ static void GetNewData_L(uint8_t data)
 							Buf_Tx_L[Robot_D_L[i].RID][8] = Robot_D_L[i].M3.Bytes[0];
 							Buf_Tx_L[Robot_D_L[i].RID][9] = Robot_D_L[i].KCK;
 							Buf_Tx_L[Robot_D_L[i].RID][10] = Robot_D_L[i].CHP;
-
+                             //LED_White_L_PORT.OUTTGL = LED_White_L_PIN_bm;
 							pck_timeout_L[Robot_D_L[i].RID]=0;
 						}
 					}

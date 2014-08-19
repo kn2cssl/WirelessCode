@@ -326,6 +326,7 @@ char *Address, char Address_Width, char Size_Payload, char Tx_Power) {
 
 	NRF24L01_L_Set_RX_Pipe(0, Address, Address_Width, Size_Payload);
 
+
 	NRF24L01_L_Set_CH(CH);
 
 	NRF24L01_L_Set_TX_Address(Address, Address_Width); // Set Transmit address
