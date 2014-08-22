@@ -17,7 +17,7 @@ char Buf_Rx_R[Max_Robot][_Buffer_Size];
 int tmprid,robotspeed;
 
 char Address[_Address_Width] = { 0x11, 0x22, 0x33, 0x44, 0x55};		
-char str[40];
+char str[200];
 uint8_t count;
 uint8_t flg;
 float P_temp,I_temp,D_temp,P,I,D,a=0,ki=0.65,kp=0.15,kd=0.05,M1,M1_temp;//ki=1.34,kp=1,kd=0.02,;
@@ -94,6 +94,9 @@ int main (void)
 				//usart_putchar(&Wireless_R_USART,Buf_Rx_R[i][j]);
 		//for (uint8_t i=0;i<_Buffer_Size;i++)
            //usart_putchar(&USARTE0,Buf_Rx_R[0][i]);
+		   
+
+		   
         for(uint8_t i=0;i<12;i++)
         {
             Buf_Tx_R[i][11] = Menu_Num;
@@ -198,6 +201,11 @@ ISR(PRX_R)
 		//LED_Green_L_PORT.OUTTGL = LED_Green_L_PIN_bm;
         NRF24L01_R_Flush_TX();
     }
+	
+			    count = sprintf(str,"%d,%d\r",((int)(Buf_Rx_R[0][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][14]) & 0x0ff),((int)(Buf_Tx_R[Robot_D[0].RID][8]<<8) & 0xff00) | ((int)(Buf_Tx_R[Robot_D[0].RID][7]) & 0x0ff));
+
+			    for (uint8_t i=0;i<count;i++)
+			    usart_putchar(&USARTE0,str[i]);
 }
 
 ISR(PRX_L)
