@@ -202,10 +202,19 @@ ISR(PRX_R)
         NRF24L01_R_Flush_TX();
     }
 	
-			    count = sprintf(str,"%d,%d\r",((int)(Buf_Rx_R[0][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][14]) & 0x0ff),((int)(Buf_Tx_R[Robot_D[0].RID][8]<<8) & 0xff00) | ((int)(Buf_Tx_R[Robot_D[0].RID][7]) & 0x0ff));
 
-			    for (uint8_t i=0;i<count;i++)
-			    usart_putchar(&USARTE0,str[i]);
+				
+					for (uint8_t j=0;j<8;j++)
+					{
+						count = sprintf(str,"%d,",((int)(Buf_Rx_R[0][2*j+1]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][2*j]) & 0x0ff));
+
+						for (uint8_t i=0;i<count;i++)
+						usart_putchar(&USARTE0,str[i]);
+					}
+					count = sprintf(str,"\r");
+
+					for (uint8_t i=0;i<count;i++)
+					usart_putchar(&USARTE0,str[i]);
 }
 
 ISR(PRX_L)
