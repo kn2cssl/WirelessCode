@@ -204,17 +204,16 @@ ISR(PRX_R)
 	
 
 				
-					for (uint8_t j=0;j<8;j++)
-					{
-						count = sprintf(str,"%d,",((int)(Buf_Rx_R[0][2*j+1]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][2*j]) & 0x0ff));
+
+						count = sprintf(str,"%d,%d,",((int)(Buf_Rx_R[0][7]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][6]) & 0x0ff),((int)(Buf_Rx_R[0][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][14]) & 0x0ff));
 
 						for (uint8_t i=0;i<count;i++)
 						usart_putchar(&USARTE0,str[i]);
-					}
-					count = sprintf(str,"\r");
+						
+						count = sprintf(str,"%d,%d,%d\r",(int)(kp*100),(int)(ki*100),(int)(kd*100));
 
-					for (uint8_t i=0;i<count;i++)
-					usart_putchar(&USARTE0,str[i]);
+						for (uint8_t i=0;i<count;i++)
+						usart_putchar(&USARTE0,str[i]);
 }
 
 ISR(PRX_L)
@@ -267,45 +266,45 @@ ISR(USART_L_RXC_vect)
     data=USARTE0_DATA;
 
 
-    //switch (data)
-    //{
-    //case 'p':
-        //kp=kp+0.01;
-        //count = sprintf(str,"kp: %d\r",(int)(kp*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //case 'o':
-        //ki=ki+0.05;
-        //count = sprintf(str,"ki: %d\r",(int)(ki*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //case 'i':
-        //kd=kd+0.01;
-        //count = sprintf(str,"kd: %d\r",(int)(kd*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //case 'l':
-        //kp=kp-0.01;
-        //count = sprintf(str,"kp: %d\r",(int)(kp*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //case 'k':
-        //ki=ki-0.05;
-        //count = sprintf(str,"ki: %d\r",(int)(ki*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //case 'j':
-        //kd=kd-0.01;
-        //count = sprintf(str,"kd: %d\r",(int)(kd*100));
-        //for (uint8_t i=0;i<count;i++)
-            //usart_putchar(&USARTE0,str[i]);
-        //break;
-    //};
+    switch (data)
+    {
+    case 'p':
+        kp=kp+0.01;
+        count = sprintf(str,"kp: %d\r",(int)(kp*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    case 'o':
+        ki=ki+0.05;
+        count = sprintf(str,"ki: %d\r",(int)(ki*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    case 'i':
+        kd=kd+0.01;
+        count = sprintf(str,"kd: %d\r",(int)(kd*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    case 'l':
+        kp=kp-0.01;
+        count = sprintf(str,"kp: %d\r",(int)(kp*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    case 'k':
+        ki=ki-0.05;
+        count = sprintf(str,"ki: %d\r",(int)(ki*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    case 'j':
+        kd=kd-0.01;
+        count = sprintf(str,"kd: %d\r",(int)(kd*100));
+        for (uint8_t i=0;i<count;i++)
+            usart_putchar(&USARTE0,str[i]);
+        break;
+    };
 
 }
 ISR(USART_L_DRE_vect) //Wireless_R_USART
