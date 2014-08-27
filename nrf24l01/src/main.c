@@ -189,7 +189,7 @@ ISR(PRX_R)
         {
 	        count = sprintf(str,"%d,%d\r",
 	        ((Buf_Rx_R[0][1+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][0+(Menu_Num*2)]&0x00ff),
-	        ((Buf_Rx_R[0][11+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][10+(Menu_Num*2)]&0x00ff));
+	        ((Buf_Rx_R[0][9+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][8+(Menu_Num*2)]&0x00ff));
 	        
 	        for (uint8_t i=0;i<count;i++)
 	        usart_putchar(&USARTE0,str[i]);
