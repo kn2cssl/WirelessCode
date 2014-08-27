@@ -95,8 +95,6 @@ int main (void)
 		//for (uint8_t i=0;i<_Buffer_Size;i++)
            //usart_putchar(&USARTE0,Buf_Rx_R[0][i]);
 		   
-
-		   
         for(uint8_t i=0;i<12;i++)
         {
             Buf_Tx_R[i][11] = Menu_Num;
@@ -105,23 +103,7 @@ int main (void)
             Buf_Tx_R[i][14] = (int)(kd*100);
         }
 
-        if(Menu_PORT.IN & Menu_Side_Select_PIN_bm)
-        {
-			 //count = sprintf(str,"%d,%d\r",
-			 //((Buf_Rx_R[0][1+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][0+(Menu_Num*2)]&0x00ff),
-			 //((Buf_Rx_R[0][11+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][10+(Menu_Num*2)]&0x00ff));
-			 
-            //for (uint8_t i=0;i<count;i++)
-                //usart_putchar(&USARTE0,str[i]);	
-        }
-		
-        if(Menu_PORT.IN & Menu_Set_PIN_bm)
-        {
-            //count = sprintf(str,"kp: %d      ki: %d      kd: %d\r",(int)(kp*100),(int)(ki*100),(int)(kd*100));
 
-            //for (uint8_t i=0;i<count;i++)
-                //usart_putchar(&USARTE0,str[i]);
-        }
 		
         //_delay_ms(20);
 		_delay_us(1);
@@ -203,23 +185,37 @@ ISR(PRX_R)
     }
 	
 
+        if(Menu_PORT.IN & Menu_Side_Select_PIN_bm)
+        {
+	        count = sprintf(str,"%d,%d\r",
+	        ((Buf_Rx_R[0][1+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][0+(Menu_Num*2)]&0x00ff),
+	        ((Buf_Rx_R[0][11+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][10+(Menu_Num*2)]&0x00ff));
+	        
+	        for (uint8_t i=0;i<count;i++)
+	        usart_putchar(&USARTE0,str[i]);
+        }
+		else
+		{
+			count = sprintf(str,"%d,%d,",((int)(Buf_Rx_R[3][7]<<8) & 0xff00) | ((int)(Buf_Rx_R[3][6]) & 0x0ff),((int)(Buf_Rx_R[3][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[3][14]) & 0x0ff));
+
+			for (uint8_t i=0;i<count;i++)
+			usart_putchar(&USARTE0,str[i]);
+									
+			count = sprintf(str,"%d,%d,%d\r",(int)(kp*100),(int)(ki*100),(int)(kd*100));
+
+			for (uint8_t i=0;i<count;i++)
+			usart_putchar(&USARTE0,str[i]);
+		}
+        
 				
 
-						count = sprintf(str,"%d,%d,",((int)(Buf_Rx_R[0][7]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][6]) & 0x0ff),((int)(Buf_Rx_R[0][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[0][14]) & 0x0ff));
 
-						for (uint8_t i=0;i<count;i++)
-						usart_putchar(&USARTE0,str[i]);
-						
-						count = sprintf(str,"%d,%d,%d\r",(int)(kp*100),(int)(ki*100),(int)(kd*100));
-
-						for (uint8_t i=0;i<count;i++)
-						usart_putchar(&USARTE0,str[i]);
 }
 
 ISR(PRX_L)
 {
 	wdt_reset();
-    uint8_t status_L = NRF24L01_L_WriteReg( W_REGISTER|STATUSe,_TX_DS|_MAX_RT);
+    uint8_t status_L = NRF24L01_L_ReadReg(STATUSe);
     if((status_L & _RX_DR) == _RX_DR)
     {
 		LED_White_L_PORT.OUTTGL = LED_White_L_PIN_bm;
@@ -238,7 +234,7 @@ ISR(PRX_L)
             //4) if there are more data in RX FIFO, repeat from step 1).
         } while((NRF24L01_L_ReadReg(FIFO_STATUS)&RX_EMPTY) == 0x00);
     }
-
+    status_L = NRF24L01_L_WriteReg(W_REGISTER|STATUSe,_TX_DS|_MAX_RT);
     if((status_L&_TX_DS) == _TX_DS)
     {
         LED_Green_L_PORT.OUTTGL = LED_Green_L_PIN_bm;
@@ -248,6 +244,31 @@ ISR(PRX_L)
         //LED_Green_R_PORT.OUTTGL = LED_Green_R_PIN_bm;
 		NRF24L01_L_Flush_TX();
     }
+	
+	
+	
+	
+	        if(Menu_PORT.IN & Menu_Side_Select_PIN_bm)
+	        {
+		        count = sprintf(str,"%d,%d\r",
+		        ((Buf_Rx_R[0][1+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][0+(Menu_Num*2)]&0x00ff),
+		        ((Buf_Rx_R[0][11+(Menu_Num*2)]<<8)&0x0ff00)|(Buf_Rx_R[0][10+(Menu_Num*2)]&0x00ff));
+		        
+		        for (uint8_t i=0;i<count;i++)
+		        usart_putchar(&USARTE0,str[i]);
+	        }
+	        else
+	        {
+		        count = sprintf(str,"%d,%d,",((int)(Buf_Rx_R[3][7]<<8) & 0xff00) | ((int)(Buf_Rx_R[3][6]) & 0x0ff),((int)(Buf_Rx_R[3][15]<<8) & 0xff00) | ((int)(Buf_Rx_R[3][14]) & 0x0ff));
+
+		        for (uint8_t i=0;i<count;i++)
+		        usart_putchar(&USARTE0,str[i]);
+		        
+		        count = sprintf(str,"%d,%d,%d\r",(int)(kp*100),(int)(ki*100),(int)(kd*100));
+
+		        for (uint8_t i=0;i<count;i++)
+		        usart_putchar(&USARTE0,str[i]);
+	        }
 }
 
 ISR(USART_R_RXC_vect) 
